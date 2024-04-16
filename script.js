@@ -53,44 +53,20 @@ class Tree {
     return root;
   }
 
-  // delete(key) {
-  //   this.root = this.deleteNode(this.root, key);
-  // }
+  find(value) {
+    let current = this.root;
 
-  // deleteNode(current, key) {
-  //   if (current == null) return current;
-
-  //   if (key === current.data) {
-  //     //case 1 and 2 node without child or with one child
-  //     if (current.left === null && current.right === null) {
-  //       return null;
-  //     } else if (current.left === null) {
-  //       return current.right;
-  //     } else if (current.right === null) {
-  //       return current.left;
-  //     } else {
-  //       // case 3 node with two child
-  //       // get smallest node in the right subtree
-  //       let tempNode = this.getSmallestNode(current.right);
-  //       current.data = tempNode.data;
-
-  //       //delete the inorder successor
-
-  //       current.right = this.deleteNode(current.right, tempNode.data);
-  //       return current;
-  //     }
-  //   }
-
-  //   //recur down the tree
-
-  //   if (key < current.data) {
-  //     current.left = this.deleteNode(current.left, key);
-  //     return current;
-  //   } else if (key > current.data) {
-  //     current.right = this.deleteNode(current.right, key);
-  //     return current;
-  //   }
-  // }
+    while (current !== null) {
+      if (value === current.data) {
+        return current;
+      } else if (value < current.data) {
+        current = current.left;
+      } else if (value > current.data) {
+        current = current.right;
+      }
+    }
+    return null;
+  }
 
   min(node = this.root) {
     while (node.left !== null) {
@@ -122,6 +98,20 @@ class Tree {
       this.prettyPrint(node.left, `${prefix}${isLeft ? '    ' : '│   '}`, true);
     }
   }
+
+  // find(node = this.root, value) {
+  //   if (node === null) return null;
+  //   if (value === node.data) {
+  //     return node;
+  //   }
+  //   if (value < node.data) {
+  //     return this.find(node.left, value);
+  //   }
+  //   if (value > node.data) {
+  //     return this.find(node.right, value);
+  //   }
+  //   return 'not found';
+  // }
 
   // insert(key) {
   //   this.root = this.insertRec(this.root, key);
@@ -208,23 +198,20 @@ function mergeSort(arr) {
 // sortedTree.prettyPrint(sortedTree.root);
 
 // const testArray = [1, 2, 3, 4, 5, 6, 7, 8, 9, 12, 13, 15, 17];
-const testArray = [1, 2, 3, 4, 5, 6];
+
+const testArray = [1, 2, 3, 4, 5, 6, 7];
 const testTree = new Tree();
 
 testTree.root = testTree.buildTree(testArray, 0, testArray.length - 1);
-// console.log('🚀 ~ testTree.root:', testTree.root);
+
+testTree.prettyPrint(testTree.root);
+// testTree.insert(34);
+// testTree.insert(14);
+// console.log('🚀 ~ testTree.min(testTree.root):', testTree.min());
+
+// console.log('🚀 ~ testTree.min(testTree.root):', testTree.max());
 testTree.prettyPrint(testTree.root);
 
-testTree.insert(34);
-testTree.insert(14);
-testTree.min();
-testTree.max();
-console.log('🚀 ~ testTree.min(testTree.root):', testTree.min());
-testTree.max();
-console.log('🚀 ~ testTree.min(testTree.root):', testTree.max());
-testTree.prettyPrint(testTree.root);
-// testTree.prettyPrint(testTree.root);
-// testTree.delete(34);
-// testTree.delete(5);
-// console.log('🚀 ~ testTree.root:', testTree.root);
-// testTree.prettyPrint(testTree.root);
+console.log('🚀 ~ testTree.find(testTree.root, 3):', testTree.find(5));
+// const foundNode = testTree.find(testTree.root, 3);
+// console.log(foundNode); // Check the result

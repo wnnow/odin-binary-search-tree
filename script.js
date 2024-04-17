@@ -82,6 +82,38 @@ class Tree {
     return node;
   }
 
+  preOrder(root) {
+    if (root === null) return;
+    console.log(root.data);
+    if (root.left) this.preOrder(root.left);
+    if (root.right) this.preOrder(root.right);
+  }
+
+  inOrder(root) {
+    if (root === null) return;
+    if (root.left) this.inOrder(root.left);
+    console.log(root.data);
+    if (root.right) this.inOrder(root.right);
+  }
+
+  postOrder(root) {
+    if (root === null) return;
+    if (root.left) this.postOrder(root.left);
+    if (root.right) this.postOrder(root.right);
+    console.log(root.data);
+  }
+
+  breadthFirst(root) {
+    if (root === null) return;
+    const queue = [root];
+    while (queue.length) {
+      const current = queue.shift();
+      console.log(current.data);
+      if (current.left) queue.push(current.left);
+      if (current.right) queue.push(current.right);
+    }
+  }
+
   prettyPrint(node, prefix = '', isLeft = true) {
     if (node === null) {
       return;
@@ -205,13 +237,8 @@ const testTree = new Tree();
 testTree.root = testTree.buildTree(testArray, 0, testArray.length - 1);
 
 testTree.prettyPrint(testTree.root);
-// testTree.insert(34);
-// testTree.insert(14);
-// console.log('🚀 ~ testTree.min(testTree.root):', testTree.min());
 
-// console.log('🚀 ~ testTree.min(testTree.root):', testTree.max());
-testTree.prettyPrint(testTree.root);
-
-console.log('🚀 ~ testTree.find(testTree.root, 3):', testTree.find(5));
-// const foundNode = testTree.find(testTree.root, 3);
-// console.log(foundNode); // Check the result
+// testTree.preOrder(testTree.root);
+// testTree.inOrder(testTree.root);
+// testTree.postOrder(testTree.root);
+testTree.breadthFirst(testTree.root);

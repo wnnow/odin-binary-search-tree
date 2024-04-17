@@ -68,6 +68,48 @@ class Tree {
     return null;
   }
 
+  //case 1: leaf node(no child). cut the reference of that node
+  //case 2: node have 1 child. replace node with their own child
+  //case 3: node have 2 child. replace node with the minimum of
+  //node right sub tree them remove that minimum node by use case 1 or 2
+  delete(value) {
+    this.root = this.deleteNode(this.root, value);
+  }
+
+  deleteNode(root, value) {
+    if (root === null) {
+      return root;
+    }
+    // If the value is less than the root's data, go to the left subtree
+    if (value < root.data) {
+      root.left = this.deleteNode(root.left, value);
+    }
+    // If the value is greater than the root's data, go to the right subtree
+    else if (value > root.data) {
+      root.right = this.deleteNode(root.right, value);
+    }
+    // If the value matches the root's data, delete this node
+    else {
+      // Case 1: Node has no children (leaf node)
+      if (!root.left && !root.right) {
+        return null;
+      }
+      // Case 2: Node has one child
+      if (!root.left) {
+        return root.right;
+      } else if (!root.right) {
+        return root.left;
+      }
+      // Case 3: Node has two children
+      // Find the minimum value in the right subtree
+      // Replace the data of the root with the data of the minimum value node
+      root.data = this.min(root.right).data;
+      // Delete the minimum value node from the right subtree
+      root.right = this.deleteNode(root.right, root.data);
+    }
+    return root;
+  }
+
   min(node = this.root) {
     while (node.left !== null) {
       node = node.left;
@@ -231,14 +273,18 @@ function mergeSort(arr) {
 
 // const testArray = [1, 2, 3, 4, 5, 6, 7, 8, 9, 12, 13, 15, 17];
 
-const testArray = [1, 2, 3, 4, 5, 6, 7];
+// const testArray = [1, 2, 3, 4, 5, 6, 7];
+const testArray = [1, 3, 5, 10, 15, 20, 25];
 const testTree = new Tree();
 
 testTree.root = testTree.buildTree(testArray, 0, testArray.length - 1);
 
 testTree.prettyPrint(testTree.root);
 
-// testTree.preOrder(testTree.root);
 // testTree.inOrder(testTree.root);
 // testTree.postOrder(testTree.root);
-testTree.breadthFirst(testTree.root);
+// testTree.breadthFirst(testTree.root);
+testTree.delete(10);
+testTree.prettyPrint(testTree.root);
+testTree.preOrder(testTree.root);
+// console.log(testTree);

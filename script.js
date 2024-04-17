@@ -11,7 +11,7 @@ class Tree {
     this.root = null;
   }
 
-  buildTree(array, start, end) {
+  buildTree(array, start = 0, end = array.length - 1) {
     if (start > end) {
       return null;
     }
@@ -23,6 +23,12 @@ class Tree {
     node.right = this.buildTree(array, mid + 1, end);
 
     return node;
+  }
+
+  rebalance() {
+    const nodes = this.preOrder().map((node) => node.data);
+    const sortedNodes = this.mergeSort(nodes);
+    this.root = this.buildTree(sortedNodes);
   }
 
   insert(value) {
@@ -122,6 +128,64 @@ class Tree {
       node = node.right;
     }
     return node;
+  }
+
+  mergeSort(arr) {
+    if (arr.length <= 1) {
+      return arr;
+    } else {
+      const mid = Math.floor(arr.length / 2);
+      const leftArr = this.mergeSort(arr.slice(0, mid));
+      const rightArr = this.mergeSort(arr.slice(mid));
+
+      const result = [];
+      let leftIndex = 0;
+      let rightIndex = 0;
+
+      while (leftIndex < leftArr.length && rightIndex < rightArr.length) {
+        if (leftArr[leftIndex] < rightArr[rightIndex]) {
+          result.push(leftArr[leftIndex]);
+          leftIndex++;
+        } else {
+          result.push(rightArr[rightIndex]);
+          rightIndex++;
+        }
+      }
+      return result
+        .concat(leftArr.slice(leftIndex))
+        .concat(rightArr.slice(rightIndex));
+    }
+  }
+
+  height(node, count = 0) {
+    if (node === null) return count - 1;
+    count++;
+    const countLeftSubtree = this.height(node.left, count);
+    const countRightSubtree = this.height(node.right, count);
+
+    return Math.max(countLeftSubtree, countRightSubtree);
+  }
+
+  depth(node) {
+    if (node === null) return -1;
+    let count = -1;
+    let current = this.root;
+
+    if (node.data === current.data) {
+      return 0;
+    }
+    while (current !== null) {
+      count++;
+      if (node.data === current.data) {
+        return count;
+      }
+      if (node.data < current.data) {
+        current = current.left;
+      } else if (node.data > current.data) {
+        current = current.right;
+      }
+    }
+    return -1;
   }
 
   preOrder(callback, node = this.root, result = []) {
@@ -256,33 +320,33 @@ function randomArray(number) {
   return tempArr;
 }
 
-function mergeSort(arr) {
-  if (arr.length <= 1) {
-    return arr;
-  } else {
-    const mid = Math.floor(arr.length / 2);
-    const leftArr = mergeSort(arr.slice(0, mid));
-    const rightArr = mergeSort(arr.slice(mid));
+// function mergeSort(arr) {
+//   if (arr.length <= 1) {
+//     return arr;
+//   } else {
+//     const mid = Math.floor(arr.length / 2);
+//     const leftArr = mergeSort(arr.slice(0, mid));
+//     const rightArr = mergeSort(arr.slice(mid));
 
-    const result = [];
-    let leftIndex = 0;
-    let rightIndex = 0;
+//     const result = [];
+//     let leftIndex = 0;
+//     let rightIndex = 0;
 
-    while (leftIndex < leftArr.length && rightIndex < rightArr.length) {
-      if (leftArr[leftIndex] < rightArr[rightIndex]) {
-        result.push(leftArr[leftIndex]);
-        leftIndex++;
-      } else {
-        result.push(rightArr[rightIndex]);
-        rightIndex++;
-      }
-    }
-    return result
-      .concat(leftArr.slice(leftIndex))
-      .concat(rightArr.slice(rightIndex));
-  }
-}
-// const randomArr = randomArray(40);
+//     while (leftIndex < leftArr.length && rightIndex < rightArr.length) {
+//       if (leftArr[leftIndex] < rightArr[rightIndex]) {
+//         result.push(leftArr[leftIndex]);
+//         leftIndex++;
+//       } else {
+//         result.push(rightArr[rightIndex]);
+//         rightIndex++;
+//       }
+//     }
+//     return result
+//       .concat(leftArr.slice(leftIndex))
+//       .concat(rightArr.slice(rightIndex));
+//   }
+// }
+const randomArr = randomArray(10);
 // const sortedRandomArr = mergeSort(randomArr);
 // console.log('🚀 ~ randomArr:', randomArr);
 // console.log('🚀 ~ sortedRandomArr:', sortedRandomArr);
@@ -303,40 +367,51 @@ function mergeSort(arr) {
 const testArray = [1, 3, 5, 10, 15, 20, 25];
 const testTree = new Tree();
 
-testTree.root = testTree.buildTree(testArray, 0, testArray.length - 1);
+testTree.root = testTree.buildTree(randomArr);
 
-testTree.prettyPrint(testTree.root);
+// testTree.prettyPrint(testTree.root);
 
 // testTree.inOrder(testTree.root);
 // testTree.postOrder(testTree.root);
-testTree.levelOrder();
-testTree.preOrder();
-console.log(
-  '🚀 ~ testTree.preOrder():',
-  testTree.preOrder((node) => {
-    node.data *= 2;
-  })
-);
-testTree.inOrder((node) => {
-  node.data *= 2;
-});
-console.log(
-  'inorder',
-  testTree.inOrder((node) => {
-    node.data *= 2;
-  })
-);
-testTree.postOrder((node) => {
-  node.data *= 2;
-});
-console.log(
-  'postOrder',
-  testTree.postOrder((node) => {
-    node.data *= 2;
-  })
-);
+// testTree.levelOrder();
+// testTree.preOrder();
+// console.log(
+//   '🚀 ~ testTree.preOrder():',
+//   testTree.preOrder((node) => {
+//     node.data *= 2;
+//   })
+// );
+// testTree.inOrder((node) => {
+//   node.data *= 2;
+// });
+// console.log(
+//   'inorder',
+//   testTree.inOrder((node) => {
+//     node.data *= 2;
+//   })
+// );
+// testTree.postOrder((node) => {
+//   node.data *= 2;
+// });
+// console.log(
+//   'postOrder',
+//   testTree.postOrder((node) => {
+//     node.data *= 2;
+//   })
+// );
+// testTree.prettyPrint(testTree.root);
+
 testTree.prettyPrint(testTree.root);
-// testTree.delete(10);
+testTree.rebalance();
+testTree.prettyPrint(testTree.root);
+// let data = testTree.preOrder().map((node) => node.data);
+// console.log('🚀 ~ data ~ data:', data);
+// for (let index = 0; index < 10; index++) {
+//   data.push(Math.floor(Math.random() * 20 + 1));
+// }
+// console.log('🚀 ~ data ~ data:', data);
+// let sortedData = mergeSort(data);
+// testTree.root = testTree.buildTree(sortedData);
 // testTree.prettyPrint(testTree.root);
 // testTree.preOrder(testTree.root);
 // console.log(testTree);

@@ -145,15 +145,18 @@ class Tree {
     console.log(root.data);
   }
 
-  breadthFirst(root) {
-    if (root === null) return;
-    const queue = [root];
+  levelOrder(callback) {
+    if (this.root === null) return this.root;
+    const result = [];
+    const queue = [this.root];
     while (queue.length) {
       const current = queue.shift();
-      console.log(current.data);
+      if (typeof callback === 'function') callback(current);
+      result.push(current);
       if (current.left) queue.push(current.left);
       if (current.right) queue.push(current.right);
     }
+    return result;
   }
 
   prettyPrint(node, prefix = '', isLeft = true) {
@@ -283,8 +286,8 @@ testTree.prettyPrint(testTree.root);
 
 // testTree.inOrder(testTree.root);
 // testTree.postOrder(testTree.root);
-// testTree.breadthFirst(testTree.root);
-testTree.delete(10);
-testTree.prettyPrint(testTree.root);
-testTree.preOrder(testTree.root);
+testTree.levelOrder();
+// testTree.delete(10);
+// testTree.prettyPrint(testTree.root);
+// testTree.preOrder(testTree.root);
 // console.log(testTree);

@@ -124,25 +124,48 @@ class Tree {
     return node;
   }
 
-  preOrder(root) {
-    if (root === null) return;
-    console.log(root.data);
-    if (root.left) this.preOrder(root.left);
-    if (root.right) this.preOrder(root.right);
+  preOrder(callback, node = this.root, result = []) {
+    if (node === null) return result;
+
+    if (typeof callback === 'function') {
+      callback(node);
+    }
+
+    result.push(node);
+
+    this.preOrder(callback, node.left, result);
+    this.preOrder(callback, node.right, result);
+
+    return result;
   }
 
-  inOrder(root) {
-    if (root === null) return;
-    if (root.left) this.inOrder(root.left);
-    console.log(root.data);
-    if (root.right) this.inOrder(root.right);
+  inOrder(callback, node = this.root, result = []) {
+    if (node === null) return node;
+
+    if (typeof callback === 'function') {
+      callback(node);
+    }
+
+    this.inOrder(callback, node.left, result);
+    result.push(node);
+    this.inOrder(callback, node.right, result);
+
+    return result;
   }
 
-  postOrder(root) {
-    if (root === null) return;
-    if (root.left) this.postOrder(root.left);
-    if (root.right) this.postOrder(root.right);
-    console.log(root.data);
+  postOrder(callback, node = this.root, result = []) {
+    if (node === null) return node;
+
+    if (typeof callback === 'function') {
+      callback(node);
+    }
+
+    this.postOrder(callback, node.left, result);
+    this.postOrder(callback, node.right, result);
+
+    result.push(node);
+
+    return result;
   }
 
   levelOrder(callback) {
@@ -287,6 +310,32 @@ testTree.prettyPrint(testTree.root);
 // testTree.inOrder(testTree.root);
 // testTree.postOrder(testTree.root);
 testTree.levelOrder();
+testTree.preOrder();
+console.log(
+  '🚀 ~ testTree.preOrder():',
+  testTree.preOrder((node) => {
+    node.data *= 2;
+  })
+);
+testTree.inOrder((node) => {
+  node.data *= 2;
+});
+console.log(
+  'inorder',
+  testTree.inOrder((node) => {
+    node.data *= 2;
+  })
+);
+testTree.postOrder((node) => {
+  node.data *= 2;
+});
+console.log(
+  'postOrder',
+  testTree.postOrder((node) => {
+    node.data *= 2;
+  })
+);
+testTree.prettyPrint(testTree.root);
 // testTree.delete(10);
 // testTree.prettyPrint(testTree.root);
 // testTree.preOrder(testTree.root);

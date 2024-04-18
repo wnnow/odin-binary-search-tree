@@ -31,6 +31,23 @@ class Tree {
     this.root = this.buildTree(sortedNodes);
   }
 
+  isBalance(root = this.root) {
+    if (root === null) return true;
+
+    let leftHeight = this.height(root.left); // Height of left subtree
+    let rightHeight = this.height(root.right); // Height of right subtree
+
+    // Check if the difference in heights is <= 1 and recursively check balance of left and right subtrees
+    if (
+      Math.abs(leftHeight - rightHeight) <= 1 &&
+      this.isBalance(root.left) &&
+      this.isBalance(root.right)
+    ) {
+      return true; // Tree is balanced
+    }
+    return false; // Tree is not balanced
+  }
+
   insert(value) {
     const newNode = new Node(value);
     if (this.root === null) {
@@ -157,13 +174,10 @@ class Tree {
     }
   }
 
-  height(node, count = 0) {
-    if (node === null) return count - 1;
-    count++;
-    const countLeftSubtree = this.height(node.left, count);
-    const countRightSubtree = this.height(node.right, count);
+  height(node = this.root) {
+    if (node === null) return 0;
 
-    return Math.max(countLeftSubtree, countRightSubtree);
+    return Math.max(this.height(node.left), this.height(node.right)) + 1;
   }
 
   depth(node) {
@@ -263,6 +277,15 @@ class Tree {
     }
   }
 
+  // height(node, count = 0) {
+  //   if (node === null) return count - 1;
+  //   count++;
+  //   const countLeftSubtree = this.height(node.left, count);
+  //   const countRightSubtree = this.height(node.right, count);
+
+  //   return Math.max(countLeftSubtree, countRightSubtree);
+  // }
+
   // find(node = this.root, value) {
   //   if (node === null) return null;
   //   if (value === node.data) {
@@ -346,7 +369,7 @@ function randomArray(number) {
 //       .concat(rightArr.slice(rightIndex));
 //   }
 // }
-const randomArr = randomArray(10);
+const randomArr = randomArray(17);
 // const sortedRandomArr = mergeSort(randomArr);
 // console.log('🚀 ~ randomArr:', randomArr);
 // console.log('🚀 ~ sortedRandomArr:', sortedRandomArr);
@@ -367,8 +390,14 @@ const randomArr = randomArray(10);
 const testArray = [1, 3, 5, 10, 15, 20, 25];
 const testTree = new Tree();
 
-testTree.root = testTree.buildTree(randomArr);
-
+testTree.root = testTree.buildTree(testArray);
+testTree.prettyPrint(testTree.root);
+console.log(testTree.height());
+testTree.find(25).right = new Node(30);
+// testTree.find(30).right = new Node(35);
+testTree.prettyPrint(testTree.root);
+console.log(testTree.height());
+console.log('🚀 ~ testTree.isBalance():', testTree.isBalance());
 // testTree.prettyPrint(testTree.root);
 
 // testTree.inOrder(testTree.root);
@@ -401,9 +430,10 @@ testTree.root = testTree.buildTree(randomArr);
 // );
 // testTree.prettyPrint(testTree.root);
 
-testTree.prettyPrint(testTree.root);
-testTree.rebalance();
-testTree.prettyPrint(testTree.root);
+// testTree.prettyPrint(testTree.root);
+// testTree.rebalance();
+// testTree.prettyPrint(testTree.root);
+
 // let data = testTree.preOrder().map((node) => node.data);
 // console.log('🚀 ~ data ~ data:', data);
 // for (let index = 0; index < 10; index++) {
